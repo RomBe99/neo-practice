@@ -1,8 +1,6 @@
 package ru.rombe.neopractice.configuration;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import ru.rombe.neopractice.util.JsonUtils;
 
 import java.io.BufferedReader;
 import java.nio.charset.StandardCharsets;
@@ -12,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class FilePropertiesSource implements IPropertiesSource<String, Set<String>> {
-    private final Gson mapper = new GsonBuilder().create();
     private final String fileName;
 
     public FilePropertiesSource(String fileName) {
@@ -29,8 +26,7 @@ public class FilePropertiesSource implements IPropertiesSource<String, Set<Strin
                 sb.append(line);
             }
 
-            return mapper.fromJson(sb.toString(), new TypeToken<Map<String, Set<String>>>() {
-            }.getType());
+            return JsonUtils.mapFromJson(sb.toString());
         }
     }
 }
