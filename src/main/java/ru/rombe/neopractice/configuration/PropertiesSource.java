@@ -1,8 +1,7 @@
 package ru.rombe.neopractice.configuration;
 
-import java.util.Collection;
 import java.util.Map;
 
-public interface IPropertiesSource<K, V> {
+public interface PropertiesSource<K, V> {
     Map<K, V> extract() throws Exception;
 }
