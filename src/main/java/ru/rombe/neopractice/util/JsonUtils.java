@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Map;
 
 public class JsonUtils {
@@ -15,6 +16,13 @@ public class JsonUtils {
 
     public static <T> T fromJson(String json, Class<T> clazz) {
         return MAPPER.fromJson(json, clazz);
+    }
+
+    public static <C extends Collection<?>> C collectionFromJson(String json) {
+        Type collectionType = new TypeToken<C>() {
+        }.getType();
+
+        return MAPPER.fromJson(json, collectionType);
     }
 
     public static <K, V> Map<K, V> mapFromJson(String jsonWithMap) {
