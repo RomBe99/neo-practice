@@ -7,17 +7,18 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Set;
 
 public class FilePropertiesSource<K, V> implements PropertiesSource<K, V> {
-    private final String fileName;
+    private final String filename;
 
-    public FilePropertiesSource(String fileName) {
-        this.fileName = fileName;
+    public FilePropertiesSource(String filename) {
+        this.filename = filename;
     }
 
     @Override
-    public Map<K, V> extract() throws Exception {
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get(fileName), StandardCharsets.UTF_8)) {
+    public Map<K, Set<V>> extract() throws Exception {
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(filename), StandardCharsets.UTF_8)) {
             StringBuilder sb = new StringBuilder();
             String line;
 
