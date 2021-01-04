@@ -18,6 +18,6 @@ public class PropertiesManagerImpl<K, V> implements PropertiesManager<K, V> {
     public boolean containsValue(K propertyKey, V propertyValue) {
         Set<V> values = properties.get(propertyKey);
 
-        return values != null && values.contains(propertyValue);
+        return values != null && propertyValue != null && values.contains(propertyValue);
     }
 }
