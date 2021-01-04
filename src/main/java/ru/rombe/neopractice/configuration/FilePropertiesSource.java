@@ -6,18 +6,18 @@ import java.io.BufferedReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class FilePropertiesSource<K, V> implements PropertiesSource<K, V> {
     private final String filename;
+    private Map<K, Set<V>> extractedProps;
 
     public FilePropertiesSource(String filename) {
         this.filename = filename;
     }
 
     @Override
-    public Map<K, Set<V>> extract() throws Exception {
+    public Map<K, Set<V>> extractProperties() throws Exception {
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filename), StandardCharsets.UTF_8)) {
             StringBuilder sb = new StringBuilder();
             String line;
@@ -26,7 +26,14 @@ public class FilePropertiesSource<K, V> implements PropertiesSource<K, V> {
                 sb.append(line);
             }
 
-            return JsonUtils.mapFromJson(sb.toString());
+            extractedProps = JsonUtils.mapFromJson(sb.toString());
+
+            return extractedProps;
         }
+    }
+
+    @Override
+    public List<K> extractReadOrder() {
+        return extractedProps == null ? Collections.emptyList() : new ArrayList<>(extractedProps.keySet());
     }
 }
