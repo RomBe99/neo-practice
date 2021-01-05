@@ -38,7 +38,11 @@ public class FilePropertiesSource<K, V> implements PropertiesSource<K, V> {
     }
 
     @Override
-    public List<K> extractReadOrder() {
-        return extractedProps == null ? Collections.emptyList() : new ArrayList<>(extractedProps.keySet());
+    public List<K> extractReadOrder() throws Exception {
+        if (extractedProps == null) {
+            extractProperties();
+        }
+
+        return new ArrayList<>(extractedProps.keySet());
     }
 }
