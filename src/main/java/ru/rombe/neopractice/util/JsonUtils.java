@@ -1,34 +1,46 @@
 package ru.rombe.neopractice.util;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Map;
 
 public class JsonUtils {
-    private static final Gson MAPPER = new Gson();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public static String toJson(Object o) {
-        return MAPPER.toJson(o);
+    public static String toJson(Object o) throws Exception {
+        return MAPPER.writeValueAsString(o);
     }
 
     public static <T> T fromJson(String json, Class<T> clazz) {
-        return MAPPER.fromJson(json, clazz);
+        try {
+            return MAPPER.readValue(json, clazz);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static <C extends Collection<?>> C collectionFromJson(String json) {
-        Type collectionType = new TypeToken<C>() {
-        }.getType();
+        TypeReference<C> collectionType = new TypeReference<>() {
+        };
 
-        return MAPPER.fromJson(json, collectionType);
+        try {
+            return MAPPER.readValue(json, collectionType);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static <K, V> Map<K, V> mapFromJson(String jsonWithMap) {
-        Type mapType = new TypeToken<Map<K, V>>() {
-        }.getType();
+        TypeReference<Map<K, V>> mapType = new TypeReference<>() {
+        };
 
-        return MAPPER.fromJson(jsonWithMap, mapType);
+        try {
+            return MAPPER.readValue(jsonWithMap, mapType);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
