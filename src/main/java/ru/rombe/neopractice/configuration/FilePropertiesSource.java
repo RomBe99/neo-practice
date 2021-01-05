@@ -26,7 +26,12 @@ public class FilePropertiesSource<K, V> implements PropertiesSource<K, V> {
                 sb.append(line);
             }
 
-            extractedProps = JsonUtils.mapFromJson(sb.toString());
+            Map<K, Set<V>> temp = JsonUtils.mapFromJson(sb.toString());
+            extractedProps = new LinkedHashMap<>(temp.size());
+
+            for (K k : temp.keySet()) {
+                extractedProps.put(k, new LinkedHashSet<>(temp.get(k)));
+            }
 
             return extractedProps;
         }
