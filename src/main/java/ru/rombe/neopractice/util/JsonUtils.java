@@ -10,8 +10,12 @@ import java.util.Map;
 public class JsonUtils {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public static String toJson(Object o) throws Exception {
-        return MAPPER.writeValueAsString(o);
+    public static String toJson(Object o) {
+        try {
+            return MAPPER.writeValueAsString(o);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static <T> T fromJson(String json, Class<T> clazz) {
