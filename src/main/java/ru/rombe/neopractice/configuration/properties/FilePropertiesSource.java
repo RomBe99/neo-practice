@@ -1,4 +1,4 @@
-package ru.rombe.neopractice.configuration;
+package ru.rombe.neopractice.configuration.properties;
 
 import ru.rombe.neopractice.util.JsonUtils;
 

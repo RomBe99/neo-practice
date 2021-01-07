@@ -1,4 +1,4 @@
-package ru.rombe.neopractice.configuration;
+package ru.rombe.neopractice.configuration.properties;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;

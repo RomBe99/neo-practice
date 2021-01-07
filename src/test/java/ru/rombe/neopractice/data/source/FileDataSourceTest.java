@@ -1,10 +1,10 @@
-package ru.rombe.neopractice.configuration;
+package ru.rombe.neopractice.data.source;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.rombe.neopractice.BaseTest;
-import ru.rombe.neopractice.data.source.DataSource;
-import ru.rombe.neopractice.data.source.FileDataSource;
+import ru.rombe.neopractice.configuration.properties.FilePropertiesSource;
+import ru.rombe.neopractice.configuration.properties.PropertiesSource;
 
 import java.util.*;
 
