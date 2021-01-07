@@ -3,12 +3,12 @@ package ru.rombe.neopractice.data.source;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.rombe.neopractice.BaseTest;
-import ru.rombe.neopractice.configuration.properties.FilePropertiesSource;
+import ru.rombe.neopractice.configuration.properties.PropertiesSourceFile;
 import ru.rombe.neopractice.configuration.properties.PropertiesSource;
 
 import java.util.*;
 
-public class FileDataSourceTest extends BaseTest {
+public class DataSourceFileTest extends BaseTest {
     private static final String PROPS_FILENAME = "animal_props.json";
     private static final String DATA_FILENAME = "data.json";
 
@@ -25,7 +25,7 @@ public class FileDataSourceTest extends BaseTest {
 
         createFile(DATA_FILENAME);
 
-        PropertiesSource<String, String> propsSource = new FilePropertiesSource<>(PROPS_FILENAME);
+        PropertiesSource<String, String> propsSource = new PropertiesSourceFile<>(PROPS_FILENAME);
         List<List<String>> data = Arrays.asList(
                 Arrays.asList("THIN", "LOW", "MALE"),
                 Arrays.asList("AVERAGE", "MEDIUM", "FEMALE"),
@@ -41,7 +41,7 @@ public class FileDataSourceTest extends BaseTest {
         try {
             List<String> propsReadOrder = propsSource.extractReadOrder();
 
-            DataSource<String, String> dataSource = new FileDataSource<>(DATA_FILENAME, propsReadOrder);
+            DataSource<String, String> dataSource = new DataSourceFile<>(DATA_FILENAME, propsReadOrder);
             Set<Map<String, String>> actualData = dataSource.extract();
             Set<Map<String, String>> expectedData = new LinkedHashSet<>(actualData.size());
 

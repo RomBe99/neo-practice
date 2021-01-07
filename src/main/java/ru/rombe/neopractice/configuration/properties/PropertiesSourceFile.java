@@ -8,11 +8,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class FilePropertiesSource<K, V> implements PropertiesSource<K, V> {
+public class PropertiesSourceFile<K, V> implements PropertiesSource<K, V> {
     private final String filename;
     private Map<K, Set<V>> extractedProps;
 
-    public FilePropertiesSource(String filename) {
+    public PropertiesSourceFile(String filename) {
         this.filename = filename;
     }
 

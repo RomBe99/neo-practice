@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class FilePropertiesSourceTest extends BaseTest {
+public class PropertiesSourceFileTest extends BaseTest {
     private static final String TEMP_FILENAME = "temp_props.json";
 
     @Test
@@ -22,7 +22,7 @@ public class FilePropertiesSourceTest extends BaseTest {
 
         writeToFile(TEMP_FILENAME, toJson(expectedMap));
 
-        PropertiesSource<String, String> source = new FilePropertiesSource<>(TEMP_FILENAME);
+        PropertiesSource<String, String> source = new PropertiesSourceFile<>(TEMP_FILENAME);
 
         try {
             Map<String, Set<String>> actualMap = source.extractProperties();

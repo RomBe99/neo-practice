@@ -9,11 +9,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class FileDataSource<K, V> implements DataSource<K, V> {
+public class DataSourceFile<K, V> implements DataSource<K, V> {
     private final String filename;
     private final List<K> propertyReadOrder;
 
-    public FileDataSource(String filename, List<K> propertyReadOrder) {
+    public DataSourceFile(String filename, List<K> propertyReadOrder) {
         this.filename = filename;
         this.propertyReadOrder = propertyReadOrder;
     }
