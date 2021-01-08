@@ -17,7 +17,7 @@ public class DataSourceFile implements DataSource {
     }
 
     @Override
-    public Set<List<String>> extract() throws IOException {
+    public Set<Map<String, String>> extract() throws IOException {
         StringBuilder sb = new StringBuilder();
 
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filename), StandardCharsets.UTF_8)) {
@@ -28,7 +28,7 @@ public class DataSourceFile implements DataSource {
             }
         }
 
-        List<List<String>> data = JsonUtils.collectionFromJson(sb.toString());
+        List<Map<String, String>> data = JsonUtils.collectionFromJson(sb.toString());
 
         return new HashSet<>(data);
     }
