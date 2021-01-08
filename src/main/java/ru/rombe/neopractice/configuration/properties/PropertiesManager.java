@@ -1,7 +1,9 @@
 package ru.rombe.neopractice.configuration.properties;
 
-public interface PropertiesManager<K, V> {
-    boolean containsKey(K propertyKey);
+public interface PropertiesManager {
+    boolean containsKey(String propertyKey);
 
-    boolean containsValue(K propertyKey, V propertyValue);
+    boolean containsValue(String propertyKey, String propertyValue);
+
+    void update() throws Exception;
 }

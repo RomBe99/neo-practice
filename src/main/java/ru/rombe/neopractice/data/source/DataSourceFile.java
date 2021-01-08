@@ -9,17 +9,15 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class DataSourceFile<K, V> implements DataSource<K, V> {
+public class DataSourceFile implements DataSource {
     private final String filename;
-    private final List<K> propertyReadOrder;
 
-    public DataSourceFile(String filename, List<K> propertyReadOrder) {
+    public DataSourceFile(String filename) {
         this.filename = filename;
-        this.propertyReadOrder = propertyReadOrder;
     }
 
     @Override
-    public Set<Map<K, V>> extract() throws IOException {
+    public Set<List<String>> extract() throws IOException {
         StringBuilder sb = new StringBuilder();
 
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filename), StandardCharsets.UTF_8)) {
@@ -30,23 +28,8 @@ public class DataSourceFile<K, V> implements DataSource<K, V> {
             }
         }
 
-        List<List<V>> data =  JsonUtils.collectionFromJson(sb.toString());
-        Set<Map<K, V>> result = new HashSet<>(data.size());
+        List<List<String>> data = JsonUtils.collectionFromJson(sb.toString());
 
-        final int readOrderSize = propertyReadOrder.size();
-
-        for (List<V> d : data) {
-            if (d.size() == readOrderSize) {
-                Map<K, V> temp = new HashMap<>();
-
-                for (int i = 0; i < readOrderSize; i++) {
-                    temp.put(propertyReadOrder.get(i), d.get(i));
-                }
-
-                result.add(temp);
-            }
-        }
-
-        return result;
+        return new HashSet<>(data);
     }
 }

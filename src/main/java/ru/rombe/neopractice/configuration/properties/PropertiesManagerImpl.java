@@ -2,22 +2,34 @@ package ru.rombe.neopractice.configuration.properties;
 
 import java.util.*;
 
-public class PropertiesManagerImpl<K, V> implements PropertiesManager<K, V> {
-    private final Map<K, Set<V>> properties = new HashMap<>();
+public class PropertiesManagerImpl implements PropertiesManager {
+    private Map<String, Set<String>> properties;
+    private PropertiesSource source;
 
-    public PropertiesManagerImpl(Map<K, Set<V>> properties) {
-        this.properties.putAll(properties);
+    public PropertiesManagerImpl(PropertiesSource source) throws Exception {
+        this.source = source;
+
+        update();
     }
 
     @Override
-    public boolean containsKey(K propertyKey) {
+    public boolean containsKey(String propertyKey) {
         return properties.containsKey(propertyKey);
     }
 
     @Override
-    public boolean containsValue(K propertyKey, V propertyValue) {
-        Set<V> values = properties.get(propertyKey);
+    public boolean containsValue(String propertyKey, String propertyValue) {
+        Set<String> values = properties.get(propertyKey);
 
         return values != null && propertyValue != null && values.contains(propertyValue);
+    }
+
+    @Override
+    public void update() throws Exception {
+        properties = source.extract();
+    }
+
+    public void setSource(PropertiesSource source) {
+        this.source = source;
     }
 }

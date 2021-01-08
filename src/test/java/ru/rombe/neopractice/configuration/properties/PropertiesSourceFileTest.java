@@ -22,10 +22,10 @@ public class PropertiesSourceFileTest extends BaseTest {
 
         writeToFile(TEMP_FILENAME, toJson(expectedMap));
 
-        PropertiesSource<String, String> source = new PropertiesSourceFile<>(TEMP_FILENAME);
+        PropertiesSource source = new PropertiesSourceFile(TEMP_FILENAME);
 
         try {
-            Map<String, Set<String>> actualMap = source.extractProperties();
+            Map<String, Set<String>> actualMap = source.extract();
 
             Assertions.assertEquals(expectedMap, actualMap);
         } catch (Exception e) {
