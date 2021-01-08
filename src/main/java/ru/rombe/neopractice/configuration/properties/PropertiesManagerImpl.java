@@ -1,14 +1,14 @@
 package ru.rombe.neopractice.configuration.properties;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 
 public class PropertiesManagerImpl implements PropertiesManager {
     private Map<String, Set<String>> properties;
     private PropertiesSource source;
 
     public PropertiesManagerImpl(PropertiesSource source) throws Exception {
-        this.source = source;
-
+        setSource(source);
         update();
     }
 
