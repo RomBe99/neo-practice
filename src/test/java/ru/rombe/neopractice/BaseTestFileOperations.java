@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public abstract class BaseTest {
+public abstract class BaseTestFileOperations {
     public static void createFile(String filename) {
         try {
             Files.createFile(Paths.get(filename));

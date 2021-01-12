@@ -4,31 +4,31 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import ru.rombe.neopractice.BaseTest;
+import ru.rombe.neopractice.BaseTestFileOperations;
 import ru.rombe.neopractice.util.JsonUtils;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class FileSourceTest extends BaseTest {
-    private static final String sourceFileName = "temp_props.json";
-    final FileSource fileSource = new FileSource(sourceFileName);
+public class FileSourceTest extends BaseTestFileOperations {
+    private static final String sourceFilename = "temp_props.json";
+    final FileSource fileSource = new FileSource(sourceFilename);
 
     @BeforeAll
     public static void createFile() {
-        createFile(sourceFileName);
+        createFile(sourceFilename);
     }
 
     @AfterAll
     public static void deleteFile() {
-        deleteFile(sourceFileName);
+        deleteFile(sourceFilename);
     }
 
     @ParameterizedTest
     @MethodSource("extractTestValues")
     public void extractTest(String expectedString) throws IOException {
-        writeToFile(sourceFileName, expectedString);
+        writeToFile(sourceFilename, expectedString);
 
         String actualString = fileSource.extract();
 
