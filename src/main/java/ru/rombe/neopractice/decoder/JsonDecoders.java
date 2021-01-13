@@ -5,7 +5,7 @@ import ru.rombe.neopractice.util.JsonUtils;
 import java.util.*;
 
 public class JsonDecoders {
-    public static <K, V> Map<K, Set<V>> mapFromJson(String json) {
+    public static <K, V> Map<K, Set<V>> mapToSetFromJson(String json) {
         Map<K, Collection<V>> temp = JsonUtils.mapFromJson(json);
         Map<K, Set<V>> result = new LinkedHashMap<>();
 

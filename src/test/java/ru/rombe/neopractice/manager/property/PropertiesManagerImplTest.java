@@ -43,7 +43,7 @@ public class PropertiesManagerImplTest {
             properties.put("SEX", Set.of("MALE", "FEMALE"));
 
             Source<String> source = Mockito.mock(Source.class);
-            PropertiesManagerImpl<String, String, String> propertiesManager = new PropertiesManagerImpl<>(source, JsonDecoders::mapFromJson);
+            PropertiesManagerImpl<String, String, String> propertiesManager = new PropertiesManagerImpl<>(source, JsonDecoders::mapToSetFromJson);
 
             Mockito.when(source.extract()).thenReturn(JsonUtils.toJson(properties));
 
@@ -66,7 +66,7 @@ public class PropertiesManagerImplTest {
             properties.put("SEX", Set.of("MALE", "FEMALE"));
 
             Source<String> source = Mockito.mock(Source.class);
-            PropertiesManagerImpl<String, String, String> propertiesManager = new PropertiesManagerImpl<>(source, JsonDecoders::mapFromJson);
+            PropertiesManagerImpl<String, String, String> propertiesManager = new PropertiesManagerImpl<>(source, JsonDecoders::mapToSetFromJson);
 
             Mockito.when(source.extract()).thenReturn(JsonUtils.toJson(properties));
 
