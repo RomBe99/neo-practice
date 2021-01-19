@@ -36,7 +36,7 @@ public class PredicateLexicalAnalyzer implements LexicalAnalyzer<Token> {
 
     private String readLexeme() {
         if (isBracket(query.peek())) {
-            return String.valueOf(query.remove());
+            return String.valueOf(query.poll());
         }
 
         StringBuilder sb = new StringBuilder();
@@ -44,7 +44,7 @@ public class PredicateLexicalAnalyzer implements LexicalAnalyzer<Token> {
         while (hasNext() && !skipChars.contains(query.peek())) {
             sb.append(query.poll());
 
-            if (isBracket(query.remove())) {
+            if (isBracket(query.peek())) {
                 break;
             }
         }
