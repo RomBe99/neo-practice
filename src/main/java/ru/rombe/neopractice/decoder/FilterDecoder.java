@@ -1,5 +1,8 @@
 package ru.rombe.neopractice.decoder;
 
+import ru.rombe.neopractice.decoder.exception.DecoderErrorCodes;
+import ru.rombe.neopractice.decoder.exception.DecoderException;
+import ru.rombe.neopractice.manager.property.PropertiesManager;
 import ru.rombe.neopractice.util.JsonUtils;
 import ru.rombe.neopractice.util.lex.Token;
 import ru.rombe.neopractice.util.lex.exception.AnalyzerException;
@@ -12,6 +15,16 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<String, String>>>> {
+    private final Predicate<Token> containsPropAndVal;
+
+    public FilterDecoder(PropertiesManager<String, String> propertiesManager) {
+        containsPropAndVal = t -> {
+            String[] propertyAndValue = t.getValue().split("[.]");
+
+            return propertiesManager.containsPropertyValue(propertyAndValue[0], propertyAndValue[1]);
+        };
+    }
+
     private static List<Token> toReversePolishNotation(List<Token> tokens) {
         Stack<Token> operators = new Stack<>();
         List<Token> result = new LinkedList<>();
@@ -76,7 +89,7 @@ public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<
         };
         Map<PredicateTokens, Consumer<Token>> tokensActions = new HashMap<>();
         tokensActions.put(PredicateTokens.VALUE, t -> predicateStack.push(valuePredicateProducer.apply(t)));
-        tokensActions.put(PredicateTokens.NEGATION, t -> Predicate.not(predicateStack.peek()));
+        tokensActions.put(PredicateTokens.NEGATION, t -> predicateStack.push(predicateStack.pop().negate()));
         tokensActions.put(PredicateTokens.AND, t -> predicateStack.push(predicateStack.pop().and(predicateStack.pop())));
         tokensActions.put(PredicateTokens.OR, t -> predicateStack.push(predicateStack.pop().or(predicateStack.pop())));
 
@@ -90,7 +103,7 @@ public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<
     }
 
     @Override
-    public Map<String, Predicate<Map<String, String>>> decode(String jsonRules) throws AnalyzerException {
+    public Map<String, Predicate<Map<String, String>>> decode(String jsonRules) throws AnalyzerException, DecoderException {
         Map<String, String> rulesMap = JsonUtils.mapFromJson(jsonRules);
         Map<String, Predicate<Map<String, String>>> result = new HashMap<>(rulesMap.size());
 
@@ -98,7 +111,15 @@ public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<
             String rule = rulesMap.get(s);
 
             if (rule != null && !rule.isBlank()) {
-                result.put(s, decodeReversePolishNotation(toReversePolishNotation(new PredicateLexicalAnalyzer(rule).getTokens())));
+                List<Token> tokens = new PredicateLexicalAnalyzer(rule).getTokens();
+
+                for (Token t : tokens) {
+                    if (PredicateTokens.VALUE == PredicateTokens.of(t.getAttribute()) && !containsPropAndVal.test(t)) {
+                        throw new DecoderException(DecoderErrorCodes.UNKNOWN_PROPERTY_OR_VALUE, t.toString());
+                    }
+                }
+
+                result.put(s, decodeReversePolishNotation(toReversePolishNotation(tokens)));
             }
         }
 

@@ -23,7 +23,7 @@ public class PredicateLexicalAnalyzerTest {
 
     @ParameterizedTest
     @MethodSource("getTokensValues")
-    public void getTokens(PredicateLexicalAnalyzer lexAnalyzer, List<Token> expectedTokens) {
+    public void getTokensTest(PredicateLexicalAnalyzer lexAnalyzer, List<Token> expectedTokens) {
         try {
             List<Token> actualTokens = lexAnalyzer.getTokens();
 
@@ -35,7 +35,7 @@ public class PredicateLexicalAnalyzerTest {
 
     @ParameterizedTest
     @MethodSource("tryGetIncorrectTokensValues")
-    public void tryGetIncorrectTokens(PredicateLexicalAnalyzer lexAnalyzer) {
+    public void tryGetIncorrectTokensTest(PredicateLexicalAnalyzer lexAnalyzer) {
         try {
             lexAnalyzer.getTokens();
         } catch (AnalyzerException e) {
