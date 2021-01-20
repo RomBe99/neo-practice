@@ -112,6 +112,7 @@ public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<
 
             if (rule != null && !rule.isBlank()) {
                 List<Token> tokens = new PredicateLexicalAnalyzer(rule).getTokens();
+                tokens = toReversePolishNotation(tokens);
 
                 for (Token t : tokens) {
                     if (PredicateTokens.VALUE == PredicateTokens.of(t.getAttribute()) && !containsPropAndVal.test(t)) {
@@ -119,7 +120,7 @@ public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<
                     }
                 }
 
-                result.put(s, decodeReversePolishNotation(toReversePolishNotation(tokens)));
+                result.put(s, decodeReversePolishNotation(tokens));
             }
         }
 
