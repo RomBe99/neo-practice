@@ -6,18 +6,48 @@ import ru.rombe.neopractice.source.Source;
 
 import java.util.*;
 
+/**
+ * This class store properties for analysis.
+ *
+ * @param <SR> source returned value type
+ * @param <P>  keys type
+ * @param <V>  values type
+ * @see ru.rombe.neopractice.manager.AbstractManager
+ * @see ru.rombe.neopractice.manager.property.PropertiesManager
+ * @see ru.rombe.neopractice.manager.Updatable
+ * @see Source
+ */
 public class PropertiesManagerImpl<SR, P, V> extends AbstractManager<SR, Map<P, Set<V>>> implements PropertiesManager<P, V> {
     private Map<P, Set<V>> properties = Collections.emptyMap();
 
-    public PropertiesManagerImpl(Source<SR> propertiesSource, Decoder<SR, Map<P, Set<V>>> decoder) {
-        super(propertiesSource, decoder);
+    /**
+     * @param source  properties source
+     * @param decoder decoder for encoded data extracted from source
+     * @see Source
+     * @see Decoder
+     */
+    public PropertiesManagerImpl(Source<SR> source, Decoder<SR, Map<P, Set<V>>> decoder) {
+        super(source, decoder);
     }
 
+    /**
+     * Check contain property.
+     *
+     * @param property property
+     * @return true if manager contains property, else false
+     */
     @Override
     public boolean containsProperty(P property) {
         return properties.containsKey(property);
     }
 
+    /**
+     * Check contain property and value.
+     *
+     * @param property      property
+     * @param propertyValue property value
+     * @return true if manager contains property and value, else false
+     */
     @Override
     public boolean containsPropertyValue(P property, V propertyValue) {
         Set<V> values = properties.get(property);
@@ -25,6 +55,14 @@ public class PropertiesManagerImpl<SR, P, V> extends AbstractManager<SR, Map<P, 
         return values != null && values.contains(propertyValue);
     }
 
+    /**
+     * Method extract and decode properties for analysis.
+     *
+     * @throws Exception from source or decoder
+     * @see ru.rombe.neopractice.manager.Updatable
+     * @see Source
+     * @see Decoder
+     */
     @Override
     public void update() throws Exception {
         SR extractResult = source.extract();

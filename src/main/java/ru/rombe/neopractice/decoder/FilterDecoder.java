@@ -14,11 +14,18 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * This decoder encode String to Map<String, Predicate<Map<String, String>>>.
+ */
 public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<String, String>>>> {
     private static final String regexSeparator = "[.]";
 
     private final Predicate<Token> containsPropAndVal;
 
+    /**
+     * @param propertiesManager properties manager for checking properties and values
+     * @see PropertiesManager
+     */
     public FilterDecoder(PropertiesManager<String, String> propertiesManager) {
         containsPropAndVal = t -> {
             String[] propertyAndValue = t.getValue().split(regexSeparator);
@@ -27,10 +34,25 @@ public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<
         };
     }
 
+    /**
+     * Convert token to predicate token.
+     *
+     * @param token converting token
+     * @return converted token
+     * @see Token
+     * @see PredicateTokens
+     */
     private static PredicateTokens toPredicateToken(Token token) {
         return PredicateTokens.of(token.getAttribute());
     }
 
+    /**
+     * Convert tokens list in infix notation to tokens list in prefix notation (reverse polish notation).
+     *
+     * @param tokens tokens list parsed from string
+     * @return tokens list in prefix notation (reverse polish notation)
+     * @see Token
+     */
     private static List<Token> toReversePolishNotation(List<Token> tokens) {
         Stack<Token> operators = new Stack<>();
         List<Token> result = new LinkedList<>();
@@ -79,6 +101,13 @@ public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<
         return result;
     }
 
+    /**
+     * Convert tokens list in prefix notation to predicate.
+     *
+     * @param tokens tokens list in prefix notation
+     * @return predicate
+     * @see Token
+     */
     private static Predicate<Map<String, String>> decodeReversePolishNotation(List<Token> tokens) {
         Queue<Token> queue = new LinkedList<>(tokens);
         Stack<Predicate<Map<String, String>>> predicateStack = new Stack<>();
@@ -108,6 +137,14 @@ public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<
         return predicateStack.peek();
     }
 
+    /**
+     * Decode json string with mapped id to predicates.
+     *
+     * @param jsonRules json string with mapped id to predicates
+     * @return mapped id to predicates
+     * @throws AnalyzerException if analyzer find error
+     * @throws DecoderException  if decoder find unknown property or value
+     */
     @Override
     public Map<String, Predicate<Map<String, String>>> decode(String jsonRules) throws AnalyzerException, DecoderException {
         Map<String, String> rulesMap = JsonUtils.mapFromJson(jsonRules);

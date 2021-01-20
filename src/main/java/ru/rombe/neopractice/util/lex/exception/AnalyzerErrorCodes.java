@@ -1,5 +1,10 @@
 package ru.rombe.neopractice.util.lex.exception;
 
+/**
+ * Enum with error codes for AnalyzerException.
+ *
+ * @see AnalyzerException
+ */
 public enum AnalyzerErrorCodes {
     UNKNOWN_TOKEN("Unknown token");
 

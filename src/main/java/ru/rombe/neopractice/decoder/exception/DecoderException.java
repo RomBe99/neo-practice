@@ -1,9 +1,19 @@
 package ru.rombe.neopractice.decoder.exception;
 
+/**
+ * Decoders can throw this exception.
+ *
+ * @see ru.rombe.neopractice.decoder.Decoder
+ */
 public class DecoderException extends Exception {
     private final DecoderErrorCodes errorCode;
     private final String token;
 
+    /**
+     * @param errorCode error code from enum DecoderErrorCodes
+     * @param token     token with error
+     * @see DecoderErrorCodes
+     */
     public DecoderException(DecoderErrorCodes errorCode, String token) {
         this.errorCode = errorCode;
         this.token = token;

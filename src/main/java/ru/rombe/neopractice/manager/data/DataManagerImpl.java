@@ -9,18 +9,49 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * This class store data fpr analysis.
+ *
+ * @param <SR> source returned value type
+ * @param <P>  keys type
+ * @param <V>  values type
+ * @see ru.rombe.neopractice.manager.AbstractManager
+ * @see ru.rombe.neopractice.manager.data.DataManager
+ * @see ru.rombe.neopractice.manager.Updatable
+ * @see Source
+ */
 public class DataManagerImpl<SR, P, V> extends AbstractManager<SR, List<Map<P, V>>> implements DataManager<List<Map<P, V>>> {
     private List<Map<P, V>> data = Collections.emptyList();
 
-    public DataManagerImpl(Source<SR> propertiesSource, Decoder<SR, List<Map<P, V>>> decoder) {
-        super(propertiesSource, decoder);
+    /**
+     * @param source  data source
+     * @param decoder decoder for encoded data extracted from source
+     * @see Source
+     * @see Decoder
+     */
+    public DataManagerImpl(Source<SR> source, Decoder<SR, List<Map<P, V>>> decoder) {
+        super(source, decoder);
     }
 
+    /**
+     * Return already extracted and decoded data.
+     *
+     * @return data for analysis
+     * @see DataManager
+     */
     @Override
     public List<Map<P, V>> getData() {
         return data;
     }
 
+    /**
+     * Method extract and decode data for analysis.
+     *
+     * @throws Exception from source or decoder
+     * @see ru.rombe.neopractice.manager.Updatable
+     * @see Source
+     * @see Decoder
+     */
     @Override
     public void update() throws Exception {
         SR extractedData = source.extract();

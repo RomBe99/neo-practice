@@ -5,10 +5,24 @@ import ru.rombe.neopractice.source.Source;
 
 import java.util.Objects;
 
+/**
+ * This abstract class contains
+ *
+ * @param <SR> source returned value type
+ * @param <DR> decoder result
+ * @see Source
+ * @see Decoder
+ */
 public abstract class AbstractManager<SR, DR> {
     protected Source<SR> source;
     protected Decoder<SR, DR> decoder;
 
+    /**
+     * @param source  manager source
+     * @param decoder decoder for encoded data extracted from source
+     * @see Source
+     * @see Decoder
+     */
     public AbstractManager(Source<SR> source, Decoder<SR, DR> decoder) {
         this.source = source;
         this.decoder = decoder;

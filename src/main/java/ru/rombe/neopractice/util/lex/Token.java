@@ -2,6 +2,9 @@ package ru.rombe.neopractice.util.lex;
 
 import java.util.Objects;
 
+/**
+ * Class serving as a container for tokens.
+ */
 public class Token {
     private final String attribute;
     private final String value;

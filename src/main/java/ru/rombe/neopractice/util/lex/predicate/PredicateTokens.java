@@ -4,6 +4,10 @@ import java.util.Map;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
+/**
+ * Enum for predicate operations.
+ * Additionally contains regular expressions for recognizing operators and operands.
+ */
 public enum PredicateTokens {
     NEGATION("NOT", "NOT"),
     AND("AND", "AND"),
@@ -31,6 +35,12 @@ public enum PredicateTokens {
         return regexp;
     }
 
+    /**
+     * Return instance of PredicateTokens by his attribute.
+     *
+     * @param attribute attribute of PredicateTokens
+     * @return one of PredicateTokens
+     */
     public static PredicateTokens of(String attribute) {
         return operatorValues.get(attribute);
     }
