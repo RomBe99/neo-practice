@@ -1,5 +1,6 @@
 package ru.rombe.neopractice.processor;
 
+import ru.rombe.neopractice.manager.Updatable;
 import ru.rombe.neopractice.manager.data.DataManager;
 import ru.rombe.neopractice.manager.filter.FiltersManager;
 import ru.rombe.neopractice.manager.property.PropertiesManager;
@@ -9,23 +10,17 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-public class Processor<P, V, FI> {
+public class Processor<P, V, FI> implements Updatable {
     private PropertiesManager<P, V> propertiesManager;
     private DataManager<List<Map<P, V>>> dataManager;
     private FiltersManager<FI, Predicate<Map<P, V>>> filtersManager;
 
     public Processor(PropertiesManager<P, V> propertiesManager,
                      DataManager<List<Map<P, V>>> dataManager,
-                     FiltersManager<FI, Predicate<Map<P, V>>> filtersManager) throws Exception {
+                     FiltersManager<FI, Predicate<Map<P, V>>> filtersManager) {
         this.propertiesManager = propertiesManager;
         this.dataManager = dataManager;
         this.filtersManager = filtersManager;
-    }
-
-    public void loadData() throws Exception {
-        this.propertiesManager.update();
-        this.filtersManager.update();
-        this.dataManager.update();
     }
 
     public int countDataByFilterId(FI filterId) {
@@ -70,5 +65,12 @@ public class Processor<P, V, FI> {
     @Override
     public int hashCode() {
         return Objects.hash(propertiesManager, dataManager, filtersManager);
+    }
+
+    @Override
+    public void update() throws Exception {
+        this.propertiesManager.update();
+        this.filtersManager.update();
+        this.dataManager.update();
     }
 }

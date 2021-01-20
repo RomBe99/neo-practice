@@ -15,14 +15,20 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<String, String>>>> {
+    private static final String regexSeparator = "[.]";
+
     private final Predicate<Token> containsPropAndVal;
 
     public FilterDecoder(PropertiesManager<String, String> propertiesManager) {
         containsPropAndVal = t -> {
-            String[] propertyAndValue = t.getValue().split("[.]");
+            String[] propertyAndValue = t.getValue().split(regexSeparator);
 
             return propertiesManager.containsPropertyValue(propertyAndValue[0], propertyAndValue[1]);
         };
+    }
+
+    private static PredicateTokens toPredicateToken(Token token) {
+        return PredicateTokens.of(token.getAttribute());
     }
 
     private static List<Token> toReversePolishNotation(List<Token> tokens) {
@@ -34,7 +40,7 @@ public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<
         tokensActions.put(PredicateTokens.NEGATION, operators::push);
         tokensActions.put(PredicateTokens.OPEN_BRACKET, operators::push);
         tokensActions.put(PredicateTokens.CLOSE_BRACKET, t -> {
-            while (PredicateTokens.OPEN_BRACKET != PredicateTokens.of(operators.peek().getAttribute())) {
+            while (PredicateTokens.OPEN_BRACKET != toPredicateToken(operators.peek())) {
                 result.add(operators.pop());
             }
 
@@ -42,8 +48,8 @@ public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<
         });
         tokensActions.put(PredicateTokens.OR, t -> {
             try {
-                while (PredicateTokens.NEGATION == PredicateTokens.of(operators.peek().getAttribute())
-                        || PredicateTokens.AND == PredicateTokens.of(operators.peek().getAttribute())) {
+                while (PredicateTokens.NEGATION == toPredicateToken(operators.peek())
+                        || PredicateTokens.AND == toPredicateToken(operators.peek())) {
                     result.add(operators.pop());
                 }
             } catch (EmptyStackException ignored) {
@@ -53,7 +59,7 @@ public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<
         });
         tokensActions.put(PredicateTokens.AND, t -> {
             try {
-                while (PredicateTokens.NEGATION == PredicateTokens.of(operators.peek().getAttribute())) {
+                while (PredicateTokens.NEGATION == toPredicateToken(operators.peek())) {
                     result.add(operators.pop());
                 }
             } catch (EmptyStackException ignored) {
@@ -63,7 +69,7 @@ public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<
         });
 
         for (Token t : tokens) {
-            tokensActions.get(PredicateTokens.of(t.getAttribute())).accept(t);
+            tokensActions.get(toPredicateToken(t)).accept(t);
         }
 
         while (!operators.isEmpty()) {
@@ -77,7 +83,7 @@ public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<
         Queue<Token> queue = new LinkedList<>(tokens);
         Stack<Predicate<Map<String, String>>> predicateStack = new Stack<>();
         Function<Token, Predicate<Map<String, String>>> valuePredicateProducer = token -> {
-            String[] values = token.getValue().split("[.]");
+            String[] values = token.getValue().split(regexSeparator);
             final String key = values[0];
             final String value = values[1];
 
@@ -96,7 +102,7 @@ public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<
         while (!queue.isEmpty()) {
             Token token = queue.remove();
 
-            tokensActions.get(PredicateTokens.of(token.getAttribute())).accept(token);
+            tokensActions.get(toPredicateToken(token)).accept(token);
         }
 
         return predicateStack.peek();
@@ -115,7 +121,7 @@ public class FilterDecoder implements Decoder<String, Map<String, Predicate<Map<
                 tokens = toReversePolishNotation(tokens);
 
                 for (Token t : tokens) {
-                    if (PredicateTokens.VALUE == PredicateTokens.of(t.getAttribute()) && !containsPropAndVal.test(t)) {
+                    if (PredicateTokens.VALUE == toPredicateToken(t) && !containsPropAndVal.test(t)) {
                         throw new DecoderException(DecoderErrorCodes.UNKNOWN_PROPERTY_OR_VALUE, t.toString());
                     }
                 }

@@ -16,4 +16,12 @@ public class DecoderException extends Exception {
     public String getToken() {
         return token;
     }
+
+    @Override
+    public String toString() {
+        return "DecoderException{" +
+                "errorCode=" + errorCode +
+                ", token='" + token + '\'' +
+                '}';
+    }
 }

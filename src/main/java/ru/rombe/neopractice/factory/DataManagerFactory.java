@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 public class DataManagerFactory {
-    public static <P, V> DataManager<List<Map<P, V>>> getDataManagerFileBased(String sourceFilename, Decoder<String, List<Map<P, V>>> decoder) {
+    public static <P, V> DataManager<List<Map<P, V>>> getDataManagerFileBased(String sourceFilename,
+                                                                              Decoder<String, List<Map<P, V>>> decoder) {
         return new DataManagerImpl<>(new FileSource(sourceFilename), decoder);
     }
 

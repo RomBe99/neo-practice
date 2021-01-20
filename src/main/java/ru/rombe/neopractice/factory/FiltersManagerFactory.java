@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 
 public class FiltersManagerFactory {
     public static FiltersManager<String, Predicate<Map<String, String>>> getFiltersManagerFileBased(String sourceFilename,
-                                                                                         PropertiesManager<String, String> propertiesManager) {
+                                                                                                    PropertiesManager<String, String> propertiesManager) {
         return new FiltersManagerImpl<>(new FileSource(sourceFilename), new FilterDecoder(propertiesManager));
     }
 }

@@ -20,11 +20,14 @@ public class FilterDecoderTest {
 
     @ParameterizedTest
     @MethodSource("decodeTestValues")
-    public void decodeTest(FilterDecoder filterDecoder, String jsonRules, Map<String, String> animal, boolean expectedResultForAllRules) throws DecoderException, AnalyzerException {
+    public void decodeTest(FilterDecoder filterDecoder,
+                           String jsonRules, Map<String, String> animal, boolean expectedResultForAllRules)
+            throws DecoderException, AnalyzerException {
         Map<String, Predicate<Map<String, String>>> rules = filterDecoder.decode(jsonRules);
 
         for (String s : rules.keySet()) {
             boolean actualResult = rules.get(s).test(animal);
+
             Assertions.assertEquals(expectedResultForAllRules, actualResult);
         }
     }

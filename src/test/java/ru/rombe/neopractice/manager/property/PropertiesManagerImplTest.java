@@ -70,12 +70,12 @@ public class PropertiesManagerImplTest {
 
             Mockito.when(source.extract()).thenReturn(JsonUtils.toJson(properties));
 
-            arguments.add(Arguments.of(propertiesManager, "HEIGHT", "MEDIUM" , true));
-            arguments.add(Arguments.of(propertiesManager, "HEIGHT", "HIGH" , true));
-            arguments.add(Arguments.of(propertiesManager, "SEX", "FEMALE" , true));
-            arguments.add(Arguments.of(propertiesManager, "WEIGHT", null , false));
-            arguments.add(Arguments.of(propertiesManager, "WEIGHT", "heh" , false));
-            arguments.add(Arguments.of(propertiesManager, "SEX", "" , false));
+            arguments.add(Arguments.of(propertiesManager, "HEIGHT", "MEDIUM", true));
+            arguments.add(Arguments.of(propertiesManager, "HEIGHT", "HIGH", true));
+            arguments.add(Arguments.of(propertiesManager, "SEX", "FEMALE", true));
+            arguments.add(Arguments.of(propertiesManager, "WEIGHT", null, false));
+            arguments.add(Arguments.of(propertiesManager, "WEIGHT", "heh", false));
+            arguments.add(Arguments.of(propertiesManager, "SEX", "", false));
             arguments.add(Arguments.of(propertiesManager, "", null, false));
             arguments.add(Arguments.of(propertiesManager, null, null, false));
         }

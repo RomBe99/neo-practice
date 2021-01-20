@@ -44,65 +44,73 @@ public class ProcessorFileBasedTest extends BaseTestFileOperations {
 
         createFile(dataFilename);
 
+
+        List<Map<String, String>> data = new LinkedList<>();
+
         {
-            List<Map<String, String>> data = new LinkedList<>();
-
-            {
-                Map<String, String> temp = new HashMap<>();
-                temp.put("WEIGHT", "LIGHT");
-                temp.put("HEIGHT", "LITTLE");
-                temp.put("TYPE", "OMNIVOROUS");
-                data.add(temp);
-            }
-
-            {
-                Map<String, String> temp = new HashMap<>();
-                temp.put("WEIGHT", "HEAVY");
-                temp.put("HEIGHT", "LITTLE");
-                temp.put("TYPE", "OMNIVOROUS");
-                data.add(temp);
-            }
-
-            {
-                Map<String, String> temp = new HashMap<>();
-                temp.put("WEIGHT", "HEAVY");
-                temp.put("HEIGHT", "LOW");
-                temp.put("TYPE", "HERBIVOROUS");
-                data.add(temp);
-            }
-
-            {
-                Map<String, String> temp = new HashMap<>();
-                temp.put("WEIGHT", "HEAVY");
-                temp.put("HEIGHT", "LITTLE");
-                temp.put("TYPE", "HERBIVOROUS");
-                data.add(temp);
-            }
-
-            {
-                Map<String, String> temp = new HashMap<>();
-                temp.put("WEIGHT", "MEDIUM");
-                temp.put("HEIGHT", "LOW");
-                temp.put("TYPE", "CARNIVOROUS");
-                data.add(temp);
-            }
-
-            {
-                Map<String, String> temp = new HashMap<>();
-                temp.put("WEIGHT", "HEAVY");
-                temp.put("HEIGHT", "TALL");
-                temp.put("TYPE", "OMNIVOROUS");
-                data.add(temp);
-            }
-
-            writeToFile(dataFilename, JsonUtils.toJson(data));
-
+            Map<String, String> temp = new HashMap<>();
+            temp.put("WEIGHT", "LIGHT");
+            temp.put("HEIGHT", "LITTLE");
+            temp.put("TYPE", "OMNIVOROUS");
+            data.add(temp);
         }
+
+        {
+            Map<String, String> temp = new HashMap<>();
+            temp.put("WEIGHT", "HEAVY");
+            temp.put("HEIGHT", "LITTLE");
+            temp.put("TYPE", "OMNIVOROUS");
+            data.add(temp);
+        }
+
+        {
+            Map<String, String> temp = new HashMap<>();
+            temp.put("WEIGHT", "HEAVY");
+            temp.put("HEIGHT", "LOW");
+            temp.put("TYPE", "HERBIVOROUS");
+            data.add(temp);
+        }
+
+        {
+            Map<String, String> temp = new HashMap<>();
+            temp.put("WEIGHT", "HEAVY");
+            temp.put("HEIGHT", "LITTLE");
+            temp.put("TYPE", "HERBIVOROUS");
+            data.add(temp);
+        }
+
+        {
+            Map<String, String> temp = new HashMap<>();
+            temp.put("WEIGHT", "MEDIUM");
+            temp.put("HEIGHT", "LOW");
+            temp.put("TYPE", "CARNIVOROUS");
+            data.add(temp);
+        }
+
+        {
+            Map<String, String> temp = new HashMap<>();
+            temp.put("WEIGHT", "HEAVY");
+            temp.put("HEIGHT", "TALL");
+            temp.put("TYPE", "OMNIVOROUS");
+            data.add(temp);
+        }
+
+        {
+            Map<String, String> temp = new HashMap<>();
+            temp.put("WEIGHT", "HEAVY");
+            temp.put("HEIGHT", "RAND_VALUE");
+            temp.put("TYPE", "OMNIVOROUS");
+            data.add(temp);
+        }
+
+        data.add(Collections.emptyMap());
+
+        writeToFile(dataFilename, JsonUtils.toJson(data));
 
         processor = new Processor<>(propertiesManager,
                 DataManagerFactory.getDataManagerFileBasedWithJsonDecoder(dataFilename),
                 FiltersManagerFactory.getFiltersManagerFileBased(filtersFilename, propertiesManager));
-        processor.loadData();
+        processor.update();
     }
 
     @AfterAll
@@ -121,16 +129,8 @@ public class ProcessorFileBasedTest extends BaseTestFileOperations {
     }
 
     private static Stream<Arguments> countDataByFilterIdValuesBasedOnString() {
-        final String filter1 = "number herbivores";
-        final String filter2 = "number herbivores or carnivores and they small";
-        final String filter3 = "number omnivores but not high";
-
-        List<Arguments> args = new LinkedList<>();
-
-        args.add(Arguments.of(filter1, 2));
-        args.add(Arguments.of(filter2, 1));
-        args.add(Arguments.of(filter3, 2));
-
-        return args.stream();
+        return Stream.of(Arguments.of("number herbivores", 2),
+                Arguments.of("number herbivores or carnivores and they small", 1),
+                Arguments.of("number omnivores but not high", 2));
     }
 }

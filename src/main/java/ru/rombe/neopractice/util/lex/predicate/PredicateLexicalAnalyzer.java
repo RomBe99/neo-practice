@@ -21,7 +21,8 @@ public class PredicateLexicalAnalyzer implements LexicalAnalyzer<Token> {
     private boolean isBracket(Character c) {
         String temp = String.valueOf(c);
 
-        return temp.matches(PredicateTokens.OPEN_BRACKET.getRegexp()) || temp.matches(PredicateTokens.CLOSE_BRACKET.getRegexp());
+        return temp.matches(PredicateTokens.OPEN_BRACKET.getRegexp())
+                || temp.matches(PredicateTokens.CLOSE_BRACKET.getRegexp());
     }
 
     private boolean hasNext() {

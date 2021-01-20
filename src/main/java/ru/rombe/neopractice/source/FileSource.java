@@ -12,10 +12,6 @@ public class FileSource implements Source<String> {
         setFilename(Path.of(filename));
     }
 
-    public FileSource(Path filename) {
-        setFilename(filename);
-    }
-
     public void setFilename(Path filename) {
         this.filename = filename;
     }

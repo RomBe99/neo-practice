@@ -10,6 +10,7 @@ import ru.rombe.neopractice.util.lex.exception.AnalyzerException;
 
 import java.util.List;
 import java.util.stream.Stream;
+
 import static ru.rombe.neopractice.util.lex.predicate.PredicateTokens.*;
 
 public class PredicateLexicalAnalyzerTest {
