@@ -10,11 +10,30 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+/**
+ * This class provides interaction between managers, allowing analysis of data received from managers.
+ *
+ * @param <P>  type of property stored in PropertiesManager
+ * @param <V>  type of value stored in PropertiesManager
+ * @param <FI> type of filter id stored in FiltersManager
+ * @see Updatable
+ * @see PropertiesManager
+ * @see DataManager
+ * @see FiltersManager
+ */
 public class Processor<P, V, FI> implements Updatable {
     private PropertiesManager<P, V> propertiesManager;
     private DataManager<List<Map<P, V>>> dataManager;
     private FiltersManager<FI, Predicate<Map<P, V>>> filtersManager;
 
+    /**
+     * @param propertiesManager properties manager
+     * @param dataManager       data manager
+     * @param filtersManager    filters manager
+     * @see PropertiesManager
+     * @see DataManager
+     * @see FiltersManager
+     */
     public Processor(PropertiesManager<P, V> propertiesManager,
                      DataManager<List<Map<P, V>>> dataManager,
                      FiltersManager<FI, Predicate<Map<P, V>>> filtersManager) {
@@ -23,6 +42,12 @@ public class Processor<P, V, FI> implements Updatable {
         this.filtersManager = filtersManager;
     }
 
+    /**
+     * Return amount of data filtered by a given filter.
+     *
+     * @param filterId filter identifier for analysis
+     * @return amount of data filtered by a given filter
+     */
     public int countDataByFilterId(FI filterId) {
         return (int) dataManager.getData().stream()
                 .filter(m -> {
@@ -67,6 +92,12 @@ public class Processor<P, V, FI> implements Updatable {
         return Objects.hash(propertiesManager, dataManager, filtersManager);
     }
 
+    /**
+     * Update all managers implemented interface Updatable.
+     *
+     * @throws Exception If all managers implementing Updatable cannot successfully complete updates
+     * @see Updatable
+     */
     @Override
     public void update() throws Exception {
         this.propertiesManager.update();

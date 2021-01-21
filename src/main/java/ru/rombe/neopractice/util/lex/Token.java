@@ -9,6 +9,10 @@ public class Token {
     private final String attribute;
     private final String value;
 
+    /**
+     * @param attribute token attribute
+     * @param value     token value
+     */
     public Token(String attribute, String value) {
         this.attribute = attribute;
         this.value = value;
